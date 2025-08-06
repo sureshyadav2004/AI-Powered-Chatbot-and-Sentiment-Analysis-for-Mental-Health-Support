@@ -1,0 +1,158 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% block main %}
+<style>
+    .chat-container {
+        width: 400px;
+        height: 350px;
+        background-color: white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        border-radius: 5px;
+        flex-direction: column;
+    }
+    /* Optional styling for typing indicator */
+    .bot-message#typing-indicator {
+        color: #888;
+        font-style: italic;
+    }
+    .chat-box {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background-color: #fafafa;
+        border-bottom: 1px solid #ddd;
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .user-message, .bot-message {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 80%;
+    }
+    
+    .user-message {
+        align-self: flex-end;
+        background-color: #007bff;
+        color: white;
+    }
+    
+    .bot-message {
+        align-self: flex-start;
+        background-color: #e9e9e9;
+        color: #333;
+    }
+    section{
+        height: 480px;
+    }
+    .user-input {
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-top: 1px solid #ddd;
+        outline: none;
+        width: calc(100% - 80px);
+    }
+    
+    .send-btn {
+        padding: 10px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 80px;
+    }
+    
+    .send-btn:hover {
+        background-color: #0056b3;
+    }    
+</style>
+<div style="display: flex;">
+    <div style="display: flex;width:300px;height:350px;margin-right:150px;margin-left:100px">
+        <img src="{% static 'bot.webp' %}" />
+    </div>
+    <div class="chat-container">
+        <h4 style="display: flex;justify-content:center;">chatBox</h4>
+        <div class="chat-box" id="chat-box">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div style="display: flex;margin-bottom:10px;padding:5px">
+            <input type="text" id="user-input" placeholder="Type a message..." style="border: 1px solid black;" class="user-input">
+            <button id="send-btn" class="send-btn">Send</button>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+
+function sendMessage() {
+    const userInput = document.getElementById('user-input').value.trim();
+    if (userInput !== '') {
+        addUserMessage(userInput);
+        document.getElementById('user-input').value = ''; // Clear the input field
+        showTypingIndicator(); // Show typing indicator
+        sendMessageToBackend(userInput); // Send message to Django backend
+    }
+}
+
+function addUserMessage(message) {
+    const chatBox = document.getElementById('chat-box');
+    const userMessageDiv = document.createElement('div');
+    userMessageDiv.classList.add('user-message');
+    userMessageDiv.textContent = message;
+    chatBox.appendChild(userMessageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+}
+
+function showTypingIndicator() {
+    const chatBox = document.getElementById('chat-box');
+    const typingDiv = document.createElement('div');
+    typingDiv.classList.add('bot-message');
+    typingDiv.id = 'typing-indicator';
+    typingDiv.textContent = 'Chatbot is typing...';
+    chatBox.appendChild(typingDiv);
+    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+}
+
+function hideTypingIndicator() {
+    const typingDiv = document.getElementById('typing-indicator');
+    if (typingDiv) {
+        typingDiv.remove(); // Remove the typing indicator
+    }
+}
+
+function sendMessageToBackend(userMessage) {
+    // Sending the user message to Django backend using Fetch API
+    fetch('http://127.0.0.1:8000/chatbot', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `message=${encodeURIComponent(userMessage)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        const botResponse = data.response;
+        hideTypingIndicator(); // Hide typing indicator
+        addBotMessage(botResponse); // Add actual bot message
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        hideTypingIndicator(); // Hide typing indicator in case of an error
+    });
+}
+
+function addBotMessage(message) {
+    const chatBox = document.getElementById('chat-box');
+    const botMessageDiv = document.createElement('div');
+    botMessageDiv.classList.add('bot-message');
+    botMessageDiv.textContent = message;
+    chatBox.appendChild(botMessageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+}
+</script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main %}
+<style>
+    h1{
+        color: aliceblue;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+    img{
+        height: 380px;
+        margin-top: -20px;
+        width: 1200px;
+    }
+</style>
+{% if messages %}
+{% for message in messages %}
+    <p class="message" style="position: absolute;">{{ message }}</p>
+{% endfor %}
+{% endif %}
+<div >
+    <img src="{% static 'businessman-holding-hologram-digital-chatbot-600nw-2253920041.webp' %}"/>
+</div>
+{% endblock %}

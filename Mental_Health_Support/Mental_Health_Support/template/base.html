@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI-Powered Virtual Assistants for Mental Health Support</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    nav {
+        overflow: hidden;
+        background-color: #e29a15;
+    }
+    nav h1{
+        background-color: #f9f9f9;
+        padding: 0%;
+        margin: 0%;
+    }
+    body{
+        display: flex;
+        justify-content: center;
+    }
+    body .main{
+        width: 1000px;
+        height: 80vh;
+        margin-top: 60px;
+    }
+    nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    body{
+        background:linear-gradient(to left,#1c98b8 ,#1269bb)
+    }
+    nav li {
+        float: left;
+    }
+    nav{
+        border: 4px solid #0a0a0af3;
+    }
+    nav a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 26px;
+        text-decoration: none;
+        font-size: 20px;
+    }
+    section{
+        margin-top: 20px;
+        background-color: #f7f4f457;
+        margin: 0%;
+        padding: 0%;
+        width: 1000px;
+        height: 450px;
+    }
+    section img{
+        width: 1000px;
+    }
+    nav a:hover {
+        background-color: #c78c1f;
+    }
+    
+    .dropdown {
+        position: relative;
+    }
+    section h1{
+        display: flex;
+        justify-content: center;
+        font-size:35px;
+        text-align: center;
+        color: #f9f9f9;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+    
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+    }
+    
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+    
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+</style>
+<body>
+    <div class="main">
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'chatbot' %}">chatbot</a></li>
+                <li><a href="{%  url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li><a href="{% url 'register' %}">Signup</a></li>
+                <li><a href="{% url 'login' %}">login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        <section>
+            <h1 style="padding-top: 30px;">AI-Powered Virtual Assistants for Mental Health Support</h1>
+            <div>
+                {% block main %}{% endblock %}
+            </div>
+        </section>
+    </div>
+    </body>
+</html>

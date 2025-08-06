@@ -1,0 +1,133 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% block main %}
+<style>
+    .inFormBackground {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top:-24px;
+    }
+    .circle {
+        position: absolute;
+        border-radius: 50%;
+        background-color: #6c757d;
+        opacity: 0.2;
+    }
+    
+    .circle:nth-child(1) {
+        width: 200px;
+        height: 200px;
+        top: 10%;
+        left: 15%;
+    }
+    
+    .circle:nth-child(2) {
+        width: 300px;
+        height: 300px;
+        bottom: 10%;
+        right: 10%;
+    }
+    label{
+        color: #fff;
+    }
+    .inLoginForm {
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: 100%;
+        border: 1px solid black;
+    }
+    
+    .form-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .inputGroup {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+    
+    .inputGroup label {
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    
+    .inputGroup input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    
+    .submitForm {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color:#f5a700;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-left:0px;
+        margin-top: 20px;
+    }
+    @media (max-width: 600px) {
+        .form-columns {
+            grid-template-columns: 1fr;
+        }
+        .inFormBackground{
+            padding:0;
+            margin:0;
+        }
+        .inLoginForm{
+            width:250px;
+            margin:0;
+        }
+        .circle{
+            display:none
+        }
+    }
+</style>
+<div class="inFormBackground">
+    <div class="inLoginForm">
+        <form action="" method="post">
+            {% csrf_token %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+            <div class="form-columns">
+                <div class="inputGroup">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter Name" required>
+                </div>
+                <div class="inputGroup">
+                    <label for="mobile">Mobile</label>
+                    <input type="tel" id="mobile" name="mobile" placeholder="Enter Mobile Number" required>
+                </div>
+                <div class="inputGroup">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter Email" required>
+                </div>
+                <div class="inputGroup">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter Username" required>
+                </div>
+                <div class="inputGroup">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter Password" required>
+                </div>
+                <div class="inputGroup">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="cnfm_password" placeholder="Enter Password" required>
+                </div>
+            </div>
+            <button class="submitForm">Register</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
